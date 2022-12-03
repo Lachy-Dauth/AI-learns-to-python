@@ -22,6 +22,33 @@ font = pygame.font.SysFont('arial', 40)
 ai_font = pygame.font.SysFont('arial', 20)
 ai_font_2 = pygame.font.SysFont('arial', 50)
 
+def average(arr):
+    return sum(arr) / len(arr)
+
+def max_in_list(input_list):
+    max = input_list[0]
+    index = 0
+    for i in range(1,len(input_list)):
+        if input_list[i] > max:
+            max = input_list[i]
+            index = i
+    return index
+
+def max_value_in_list(input_list):
+    max = input_list[0]
+    index = 0
+    for i in range(1,len(input_list)):
+        if input_list[i] > max:
+            max = input_list[i]
+            index = i
+    return max
+
+def max_value(a, b):
+    if a > b:
+        return a
+    else:
+        return b
+
 class Snake():
     def __init__(self, starting_x, starting_y, starting_length, starting_grow):
         self.color = (0, 255, 0)
@@ -143,7 +170,8 @@ def main(ai, snake, past_scores, layers):
     frames = 0
     frames_since_action = 0
     TFrames = 100000000000000
-    boost = 1
+    max_boost = 3
+    boost = max_boost + 1
     death_punishment = 0
     no_display = False
 
@@ -159,7 +187,7 @@ def main(ai, snake, past_scores, layers):
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_0:
-                    boost = max_value((boost+1)%11, 1) 
+                    boost = max_value((boost+1)%(max_boost+2), 1) 
                 if event.key == pygame.K_2:
                     frames = TFrames - 10
                 if event.key == pygame.K_3:
@@ -203,11 +231,13 @@ def main(ai, snake, past_scores, layers):
             return ai.fitness
 
         if not no_display:
-            if frames%boost==0:
+            if frames%boost==0 or boost == max_boost + 1:
                 draw(screen, [snake])
                 score_display(ai.fitness, boost)
                 draw_stats(screen, past_scores, ai.brain["network"], layers, ai.gen_layer_outs(snake.vision()), output)
                 pygame.display.update()
+                if boost == max_boost + 1:
+                    clock.tick(20)
 
 def run():
     with open(ai_file, 'rb') as handle:

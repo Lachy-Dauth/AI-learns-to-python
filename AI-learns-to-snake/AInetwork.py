@@ -17,33 +17,6 @@ randomise_array = np.vectorize(randomise)
 def get_fitness(ai):
     return -ai.fitness
 
-def average(arr):
-    return sum(arr) / len(arr)
-
-def max_in_list(input_list):
-    max = input_list[0]
-    index = 0
-    for i in range(1,len(input_list)):
-        if input_list[i] > max:
-            max = input_list[i]
-            index = i
-    return index
-
-def max_value_in_list(input_list):
-    max = input_list[0]
-    index = 0
-    for i in range(1,len(input_list)):
-        if input_list[i] > max:
-            max = input_list[i]
-            index = i
-    return max
-
-def max_value(a, b):
-    if a > b:
-        return a
-    else:
-        return b
-
 def new_network(input_num, hidden_nums, out_num, init_range):
     network = []
     if hidden_nums == []:
