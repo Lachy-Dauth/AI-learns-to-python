@@ -112,15 +112,17 @@ class Snake():
         return visited_nodes
 
 def score_display(frames, score):
-    score_surface = font.render(str(frames) + "  " + str(score),True,(0,0,0))
+    score_surface = font.render(str(frames) + "  " + str(score),True,(255,255,255))
     score_rect = score_surface.get_rect(center = (screen_size/2,100))
     screen.blit(score_surface, score_rect)
 
 def draw(screen, snakes):
     pygame.draw.rect(screen,(32,32,32),(0,0,screen_size,screen_size))
     for snake in snakes:
-        for pixel in snake.array:
+        for index, pixel in enumerate(snake.array):
             pygame.draw.rect(screen,snake.color,((pixel[0]*pixel_size)+1, (pixel[1]*pixel_size)+1, pixel_size-2, pixel_size-2))
+            if index +1 < len(snake.array):
+                pygame.draw.rect(screen,snake.color,(((pixel[0]+snake.array[index+1][0])/2*pixel_size)+1, ((pixel[1]+snake.array[index+1][1])/2*pixel_size)+1, pixel_size-2, pixel_size-2))
         pygame.draw.rect(screen,red,((snake.apple[0]*pixel_size)+1, (snake.apple[1]*pixel_size)+1, pixel_size-2, pixel_size-2))
 
 def draw_stats(screen, past_scores, network, layers, layer_outs, dir_output):
@@ -233,7 +235,7 @@ def main(ai, snake, past_scores, layers):
         if not no_display:
             if frames%boost==0 or boost == max_boost + 1:
                 draw(screen, [snake])
-                score_display(ai.fitness, boost)
+                score_display("Score: " + str(ai.fitness), "Generation: " + str(len(past_scores)))
                 draw_stats(screen, past_scores, ai.brain["network"], layers, ai.gen_layer_outs(snake.vision()), output)
                 pygame.display.update()
                 if boost == max_boost + 1:

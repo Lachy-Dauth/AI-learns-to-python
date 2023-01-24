@@ -70,7 +70,7 @@ class Snake():
         self.score = 0 # the score of the game
         self.grow = starting_grow # how many blocks the snake needs to grow
         self.array = [(starting_x - i, starting_y) for i in range(starting_length)] # the array conaining the snake body
-        self.apple = apple_list[self.apple_index] # the coordinates of the apple
+        self.apple = (random.randint(*board_coordinates), random.randint(*board_coordinates)) # the coordinates of the apple
         self.dir = {
             "x" : -1,
             "y" : 0
@@ -82,7 +82,7 @@ class Snake():
             self.score += 4
             self.grow += 4
             self.apple_index += 1
-            self.apple = apple_list[self.apple_index]
+            self.apple = (random.randint(*board_coordinates), random.randint(*board_coordinates))
             self.check_apple()
     
     def move_snake(self):
@@ -339,8 +339,7 @@ def run():
         print()
         past_maxes.append([ai.fitness for ai in sorted(ais, key=get_fitness)][0])
         print(past_maxes[-1])
-        if len(past_maxes) - 1 == max_in_list(past_maxes):
-            highlights["ais"].append(AI(simular_network([ai for ai in sorted(ais, key=get_fitness)][0].brain, 0, 0)))
+        highlights["ais"].append(AI(simular_network([ai for ai in sorted(ais, key=get_fitness)][0].brain, 0, 0)))
         print()
         if past_maxes[-1] >= 50:
             with open(ai_file, 'wb') as handle:
